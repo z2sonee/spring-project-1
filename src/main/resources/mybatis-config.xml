@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+   <environments default="development">
+      <environment id="development">
+         <transactionManager type="JDBC" />
+         <dataSource type="POOLED">
+         <property name="driverClassName" value="${jdbc.driverClassName}"/>
+         <property name="url" value="${jdbc.url}"/>
+         <property name="username" value="${jdbc.username}"/>
+         <property name="password" value="${jdbc.password}"/>
+<!--             <property name="driver" value="oracle.jdbc.driver.OracleDriver" /> -->
+<!--             <property name="url" value="jdbc:oracle:thin:@202.20.119.117:1521:orcl" /> -->
+<!--             <property name="username" value="spring" /> -->
+<!--             <property name="password" value="spring" /> -->
+         </dataSource>
+      </environment>
+   </environments>
+   <mappers>
+      <mapper resource="phoenix/jpetstore/dao/mybatis/mapper/BidMapper.xml" />
+   </mappers>
+</configuration>

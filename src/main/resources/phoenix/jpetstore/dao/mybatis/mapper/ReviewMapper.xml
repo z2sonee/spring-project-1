@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="phoenix.jpetstore.dao.mybatis.mapper.ReviewMapper">
+
+  <cache />
+  
+  <resultMap id = "associationResultMap" type = "Review">
+     <id column="review_id" property="reviewId" />
+     <result column="review_title" property="reviewTitle" />
+     <result column="review_content" property="reviewContent" />
+<!--      <result column="review_item_name" jdbcType="VARCHAR2(40)" property="reviewItemName" /> -->
+<!--      <result column="review_item_price" jdbcType="VARCHAR2(40)" property="reviewItemPrice" /> -->
+     <association property="account" column="user_id" javaType="Account">
+        <id property="userId" column="user_id" />
+        <result property="userName" column="name" />
+     </association>
+  </resultMap>
+
+  <select id="getReviewList" resultMap="associationResultMap">
+    SELECT
+      r.review_id, 
+      r.review_title, 
+      r.review_content, 
+      u.user_id,
+      u.name
+    FROM review r, account u 
+    WHERE r.user_id = u.user_id
+    order by review_id asc
+  </select>
+  
+  <select id="getReviewsByReviewId" resultType="Review">
+  SELECT
+     REVIEW_ID AS reviewId,
+      REVIEW_TITLE AS reviewTitle,
+      REVIEW_CONTENT AS reviewContent,
+      REVIEW_ITEM_NAME AS reviewItemName,
+      REVIEW_ITEM_PRICE AS reviewItemPrice
+  FROM REVIEW
+  WHERE review_id=#{reviewId}
+  </select>
+
+  <insert id="insertReview" parameterType="Review">
+     <selectKey keyProperty="reviewId" resultType="int" order="BEFORE">
+        SELECT review_seq.nextval AS reviewId FROM DUAL
+     </selectKey>
+    INSERT INTO REVIEW (REVIEW_ID, REVIEW_TITLE, REVIEW_CONTENT, USER_ID
+    , REVIEW_ITEM_NAME, REVIEW_ITEM_PRICE) 
+    VALUES (#{reviewId}, #{param2}, #{param3}
+    , #{param4}, #{param5}, #{param6})
+  </insert>
+  
+  <update id="updateReview">
+    UPDATE REVIEW
+    SET
+      REVIEW_TITLE = #{param2}, 
+      REVIEW_CONTENT = #{param3}, 
+      USER_ID = #{param4}, 
+      REVIEW_ITEM_NAME = #{param5}, 
+      REVIEW_ITEM_PRICE = #{param6}  
+    WHERE REVIEW_ID = #{reviewId}
+  </update>
+  
+  <delete id="deleteReview" parameterType="int">
+     DELETE FROM REVIEW 
+     WHERE REVIEW_ID = #{reviewId}
+  </delete>
+  
+  <select id="findUserId" resultType="int">
+  select user_id from account where login_id = #{loginId}
+  </select>
+
+</mapper>

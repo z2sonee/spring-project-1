@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="phoenix.jpetstore.dao.mybatis.mapper.PointMapper">
+
+  <cache />
+  
+<resultMap id = "associationResultMap" type = "ViewPoint">
+     <id column="point_num" property="pointNum" />
+     <result column="point_info" property="pointInfo" />
+     <result column="total_point" property="totalPoint" />
+     <association property="account" column="user_id" javaType="Account">
+        <id property="userId" column="user_id" />
+     </association>
+  </resultMap>
+
+<select id ="getPointList" resultMap="associationResultMap">
+   SELECT
+      p.POINT_NUM,
+      p.POINT_INFO
+   FROM POINTLIST p, account u
+   WHERE p.user_id = u.user_id
+   ORDER BY POINT_NUM asc
+</select>
+
+<select id ="getPointFromAccount" resultType="int">
+   SELECT
+      POINT
+   FROM ACCOUNT
+   WHERE USER_ID = #{userId}
+</select>
+
+<insert id="insertPointInfo">
+   <selectKey keyProperty="pointNum" resultType="int" order="BEFORE">
+      SELECT point_seq.nextval AS pointNum FROM DUAL
+   </selectKey>
+   INSERT INTO POINTLIST (POINT_NUM, USER_ID, POINT_INFO, TOTAL_POINT)
+   VALUES (#{pointNum}, #{param2}, #{param3}, #{param4})
+</insert>
+
+<update id="updateAccountPoint">
+    UPDATE 
+       ACCOUNT 
+    SET 
+       POINT = #{param2}
+    WHERE USER_ID = #{param1}
+  </update>
+
+<update id="updateTotalPoint">
+    UPDATE 
+       POINTLIST
+    SET 
+       TOTAL_POINT = #{param2}
+    WHERE USER_ID = #{param1}
+  </update>
+
+</mapper>
