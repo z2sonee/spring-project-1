@@ -31,7 +31,7 @@ public class PointController {
      String loginId = (String) session.getAttribute("loginId");
      int userId = petStore.findUserId(loginId);
      
-     System.out.println(loginId + "이건 로그인 아이디고 " + userId + "이건 유저 아이디");
+     System.out.println(loginId + "(로그인시 아이디) " + userId + "(사용자의 아이디)");
      
      
      Account account = petStore.getAccount(userId);
