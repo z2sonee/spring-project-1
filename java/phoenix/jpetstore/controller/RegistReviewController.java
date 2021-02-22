@@ -74,8 +74,7 @@ public class RegistReviewController {
       String pointInfo = "리뷰 작성으로  50 포인트가 적립되었습니다.";
       
       int point = petStore.getPointFromAccount(userId);
-      System.out.println(point + "되나요?");
-      System.out.println("한 번 봅시다.");
+      System.out.println("포인트는 " + point + "점 입니다!");
       point += 50;
       System.out.println(point);
       
